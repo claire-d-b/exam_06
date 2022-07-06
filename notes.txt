@@ -1,0 +1,19 @@
+socket : cree un canal de communication et retourne son fd
+rv on arror : -1
+
+bind : assigns an address to the socket created with socket(...)
+returns 0 on success, -1 on error
+
+select : attend qu'un fd soit pret pour des operations I/O
+retourne nb de fd contenus dans les 3 fd_set (readfd, writefd, exceptfd)
+0 si le timout est atteint
+-1 en cas d'erreur
+
+FD_ZERO() initialise un set
+FD_SET() and FD_CLR() ajoute ou rm un fd dans un set
+FD_ISSET() teste un fd fait partie du set
+
+accept: extrait la premiere requete de connexion, cree une nouvelle socket connectee, et retourne un fd correspondant a cette socket
+socket = interface de connexion
+success : retourne un fd non-negatif
+error: -1
