@@ -9,7 +9,7 @@
 
 fd_set curr_sock, cpy_read, cpy_write;
 char msg[42];
-char buffer[11];
+char buffer[1000];
 char *send_msg = NULL;
 char *str = NULL;
 char *strad = NULL;
@@ -88,13 +88,13 @@ int add_client(int fd, int sockfd)
 	new->id = ++idz;
 	new->fd = fd;
 	new->str = NULL;
-	if (!(new->str = malloc(sizeof(char) * (1000 + 1))))
+	if (!(new->str = malloc(sizeof(char))))
 	{
 		write_msg(2, "Fatal error\n");
 		close(sockfd);
 		exit(1);
 	}
-	bzero(new->str, sizeof(char) * (1000 + 1));
+	bzero(new->str, sizeof(char));
 	new->next = NULL;
 	if (!client)
 		client = new;
@@ -248,10 +248,9 @@ int main(int ac, char **av)
 	FD_ZERO(&curr_sock);
 	FD_SET(sockfd, &curr_sock);
 	bzero(&msg, sizeof(msg));
-	for (int i = 0; i < 15; i++)
+	while (1)
 	{
 		cpy_read = cpy_write = curr_sock;
-		sleep(6);
 		if (select(get_max_fd(sockfd) + 1, &cpy_read, &cpy_write, NULL, NULL) < 0)
 			continue;
 		for (int fd = 0; fd <= get_max_fd(sockfd); fd++)
@@ -301,8 +300,8 @@ int main(int ac, char **av)
 			}
 		}
 	}
-	free_all();
 	free(strad);
 	strad = NULL;
+	free_all();
 	return 0;
 }
