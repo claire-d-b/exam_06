@@ -66,6 +66,7 @@ char *str_join(char *buf, char *add)
 	else
 		len = strlen(buf);
 	newbuf = malloc(sizeof(*newbuf) * (len + strlen(add) + 1));
+	printf("new_buf len: %lu\n", (sizeof(*newbuf) * (len + strlen(add) + 1)));
 	if (newbuf == 0)
 		return (0);
 	newbuf[0] = 0;
@@ -248,10 +249,9 @@ int main(int ac, char **av)
 	FD_ZERO(&curr_sock);
 	FD_SET(sockfd, &curr_sock);
 	bzero(&msg, sizeof(msg));
-	for (int i = 0; i < 15; i++)
+	while (1)
 	{
 		cpy_read = cpy_write = curr_sock;
-		sleep(6);
 		if (select(get_max_fd(sockfd) + 1, &cpy_read, &cpy_write, NULL, NULL) < 0)
 			continue;
 		for (int fd = 0; fd <= get_max_fd(sockfd); fd++)
@@ -278,11 +278,14 @@ int main(int ac, char **av)
 				int ret = recv(fd, buffer, 1000, 0);
 				if (ret > 0)
 				{
+					printf("buffer len: %lu str: %s\n", strlen(buffer), buffer);
 					strad = str_join(get_client_str(fd), buffer);
+					printf("stard len: %lu\n", strlen(strad));
 					while (extract_message(&strad, &bufad) == 1)
 					{
 						send_msg = calloc(strlen(bufad) + 42, sizeof(char));
 						sprintf(send_msg, "client %d: %s", get_id(fd), bufad);
+						printf("msg len: %lu\n", strlen(send_msg));
 						send_all(fd, send_msg);
 						free(send_msg);
 						send_msg = NULL;
