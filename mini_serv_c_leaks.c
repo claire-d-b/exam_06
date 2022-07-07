@@ -11,7 +11,6 @@ fd_set curr_sock, cpy_read, cpy_write;
 char msg[42];
 char buffer[1001];
 char *send_msg = NULL;
-char *str = NULL;
 char *strad = NULL;
 char *bufad = NULL;
 int idz = -1;
