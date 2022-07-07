@@ -248,9 +248,10 @@ int main(int ac, char **av)
 	FD_ZERO(&curr_sock);
 	FD_SET(sockfd, &curr_sock);
 	bzero(&msg, sizeof(msg));
-	while (1)
+	for (int i = 0; i < 15; i++)
 	{
 		cpy_read = cpy_write = curr_sock;
+		sleep(6);
 		if (select(get_max_fd(sockfd) + 1, &cpy_read, &cpy_write, NULL, NULL) < 0)
 			continue;
 		for (int fd = 0; fd <= get_max_fd(sockfd); fd++)
@@ -301,5 +302,7 @@ int main(int ac, char **av)
 		}
 	}
 	free_all();
+	free(strad);
+	strad = NULL;
 	return 0;
 }
