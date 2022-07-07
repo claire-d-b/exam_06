@@ -88,13 +88,13 @@ int add_client(int fd, int sockfd)
 	new->id = ++idz;
 	new->fd = fd;
 	new->str = NULL;
-	if (!(new->str = malloc(sizeof(char) * (10 + 1))))
+	if (!(new->str = malloc(sizeof(char) * (1000 + 1))))
 	{
 		write_msg(2, "Fatal error\n");
 		close(sockfd);
 		exit(1);
 	}
-	bzero(new->str, sizeof(char) * (10 + 1));
+	bzero(new->str, sizeof(char) * (1000 + 1));
 	new->next = NULL;
 	if (!client)
 		client = new;
@@ -275,10 +275,10 @@ int main(int ac, char **av)
 			else
 			{
 				bzero(&buffer, sizeof(buffer));
-				int ret = recv(fd, buffer, 10, 0);
-				strad = str_join(get_client_str(fd), buffer);
+				int ret = recv(fd, buffer, 1000, 0);
 				if (ret > 0)
 				{
+					strad = str_join(get_client_str(fd), buffer);
 					while (extract_message(&strad, &bufad) == 1)
 					{
 						send_msg = calloc(strlen(bufad) + 42, sizeof(char));
